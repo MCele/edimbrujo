@@ -1,12 +1,12 @@
 /**
- * Created by Jerome on 03-03-17.
+ * Created by Edimbrujo-Unco-IA Juegos on 11-2017.
  */
 
 var Client = {};
 //Nos conectamos al servidor.
 Client.socket = io.connect();
 Client.id;
-Client.rol;
+Client.rol="";
 Client.token;
 
 Client.sendTest = function(){
@@ -18,30 +18,35 @@ Client.getAllPlayers= function(){
     console.log("get All Players");
     Client.socket.emit('getallplayers');
 };
+Client.mover2 = function(idMov){	//recibe  direccion (entre 0 y 7) en id
+	console.log(idMov);
+//Enviamos al servidor un id del botón que acabamos de pulsar.
+        if (Client.rol!="")  Client.socket.emit('mover', { id : idMov });
+}
 Client.mover = function(direccion){
 	console.log(direccion.event.key);
 	var id=0;
 	switch(direccion.event.key){
-		case "q" : id=0;
+		case "q" : id=0;	//Arriba+Izquierda 0-Q
 				   break;
-		case "w" : id=1;
+		case "w" : id=1;	// Arriba (1-W)
 				   break;
-		case "e" : id=2;
-				   break;
-		
-		case "d" : id=3;
+		case "e" : id=2;	//Arriba+Derecha  2-E
 				   break;
 		
-		case "c" : id=4;
+		case "d" : id=3;	//--> 3-D
 				   break;
 		
-		case "x" : id=5;
+		case "c" : id=4;	// Abajo+Derecha 4-C
 				   break;
 		
-		case "z" : id=6;
+		case "x" : id=5;	//Abajo (5-X)
 				   break;
 		
-		case "a" : id=7;
+		case "z" : id=6;	// Abajo+Izquierda 6-Z
+				   break;
+		
+		case "a" : id=7;	//<-- 7-A
 				   break;
 		
 		case "s" : //Atacar
@@ -50,14 +55,14 @@ Client.mover = function(direccion){
 				   
 	}
 	
-	//Enviamos al servidor in id con la tecla que acabamos de pulsar.
-	Client.socket.emit('mover', { id : id });
+	//Enviamos al servidor un id con la tecla que acabamos de pulsar.
+        if (Client.rol!="")  Client.socket.emit('mover', { id : id });
 };
 
 Client.atacar = function(){
 	//var disparo=esferas.getFirstExists(false);
 	console.log('Ejecutamos la funcion disparar');
-	Client.socket.emit('atacar');
+	if (Client.rol!="") Client.socket.emit('atacar');
 };
 
 //Enviamos un mensje al servidor cuando un  nuevo jugador se conecta al mismo.
